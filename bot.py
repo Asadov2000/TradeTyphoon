@@ -9,7 +9,7 @@ def send_welcome(message):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     btn = KeyboardButton(
         text="🎮 Открыть игру",
-        web_app=WebAppInfo(url="https://твой-сайт-где-хостится-игра")
+        web_app=WebAppInfo(url="https://asadov2000.github.io/TradeTyphoon/")
     )
     markup.add(btn)
     bot.send_message(message.chat.id, "Добро пожаловать в Trade Typhoon!", reply_markup=markup)
