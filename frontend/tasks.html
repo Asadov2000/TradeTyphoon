@@ -4,31 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Задания - Trade Typhoon</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div id="tasks-screen">
-        <header>
-            <h1>Задания</h1>
+<body class="bg-gray-100 text-gray-800">
+    <div id="tasks-screen" class="container mx-auto p-4">
+        <header class="mb-4">
+            <h1 class="text-2xl font-bold">Задания</h1>
         </header>
         <main>
-            <ul id="tasks-list">
-                <li>
-                    <span class="task-name">Выполните 5 игр</span>
-                    <span class="task-reward">Награда: 100 монет</span>
+            <ul id="tasks-list" class="space-y-4">
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Выполните 5 игр</span>
+                    <span class="text-sm text-gray-600">Награда: 100 монет</span>
                 </li>
-                <li>
-                    <span class="task-name">Создайте 3 комнаты</span>
-                    <span class="task-reward">Награда: 50 монет</span>
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Создайте 3 комнаты</span>
+                    <span class="text-sm text-gray-600">Награда: 50 монет</span>
                 </li>
-                <li>
-                    <span class="task-name">Победите в 2 играх</span>
-                    <span class="task-reward">Награда: 200 монет</span>
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Победите в 2 играх</span>
+                    <span class="text-sm text-gray-600">Награда: 200 монет</span>
                 </li>
             </ul>
         </main>
-        <footer>
-            <button onclick="window.location.href='main.html'">Назад</button>
+        <footer class="mt-4">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded" onclick="window.location.href='main.html'">Назад</button>
         </footer>
     </div>
 </body>

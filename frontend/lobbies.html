@@ -4,74 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Лобби - Trade Typhoon</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div id="lobby-container">
-        <header>
-            <h1>Лобби</h1>
+<body class="bg-gray-100 text-gray-800">
+    <div id="lobby-container" class="container mx-auto p-4">
+        <header class="mb-4">
+            <h1 class="text-2xl font-bold">Комнаты</h1>
         </header>
         <main>
-            <div id="create-lobby">
-                <h2>Создать комнату</h2>
-                <input type="text" id="room-name" placeholder="Название комнаты">
-                <div id="password-container" style="display: none;">
-                    <input type="text" id="room-password" placeholder="Введите пароль (только цифры)" maxlength="10" oninput="validatePassword(this)">
+            <!-- Управление лобби -->
+            <section id="controls" class="mb-4">
+                <button class="toggle-button bg-blue-500 text-white px-4 py-2 rounded" onclick="toggleSection('create-lobby')">Создать комнату</button>
+                <div id="create-lobby" class="collapsible-section mt-2 p-4 bg-white shadow rounded" style="display: none;">
+                    <h2>Создать комнату</h2>
+                    <input type="text" id="room-name" placeholder="Название комнаты" class="border p-2 w-full mb-2">
+                    <div id="password-container" style="display: none;">
+                        <input type="text" id="room-password" placeholder="Введите пароль (только цифры)" maxlength="10" oninput="validatePassword(this)" class="border p-2 w-full mb-2">
+                    </div>
+                    <div class="player-buttons flex gap-2 mb-2">
+                        <!-- Кнопки выбора количества игроков -->
+                        <button onclick="selectPlayers(2)" id="players-2" class="bg-gray-300 px-4 py-2 rounded">2</button>
+                        <button onclick="selectPlayers(3)" id="players-3" class="bg-gray-300 px-4 py-2 rounded">3</button>
+                        <button onclick="selectPlayers(4)" id="players-4" class="bg-gray-300 px-4 py-2 rounded">4</button>
+                        <button onclick="selectPlayers(5)" id="players-5" class="bg-gray-300 px-4 py-2 rounded">5</button>
+                        <button onclick="selectPlayers('2x2')" id="players-2x2" class="bg-gray-300 px-4 py-2 rounded">2x2</button>
+                    </div>
+                    <label class="block mb-2">
+                        <input type="checkbox" id="is-private" onchange="togglePassword()"> Приватная комната
+                    </label>
+                    <label class="block mb-2">
+                        <input type="checkbox" id="auto-start"> Автостарт
+                    </label>
+                    <button onclick="createRoom()" class="bg-blue-500 text-white px-4 py-2 rounded">Создать</button>
                 </div>
-                <div class="player-buttons">
-                    <button onclick="selectPlayers(2)" id="players-2">2</button>
-                    <button onclick="selectPlayers(3)" id="players-3">3</button>
-                    <button onclick="selectPlayers(4)" id="players-4">4</button>
-                    <button onclick="selectPlayers(5)" id="players-5">5</button>
-                    <button onclick="selectPlayers('2x2')" id="players-2x2">2x2</button>
+
+                <button class="toggle-button bg-green-500 text-white px-4 py-2 rounded mt-4" onclick="toggleSection('lobby-filter')">Фильтр</button>
+                <div id="lobby-filter" class="collapsible-section mt-2 p-4 bg-white shadow rounded" style="display: none;">
+                    <h2 class="text-lg font-semibold mb-2">Фильтры</h2>
+                    <label class="block mb-2">
+                        <input type="radio" name="filter-type" value="all" checked onchange="filterLobbies()"> Все комнаты
+                    </label>
+                    <label class="block mb-2">
+                        <input type="radio" name="filter-type" value="public" onchange="filterLobbies()"> Публичные комнаты
+                    </label>
+                    <label class="block mb-2">
+                        <input type="radio" name="filter-type" value="private" onchange="filterLobbies()"> Приватные комнаты
+                    </label>
+                    <label class="block mb-2">
+                        <input type="checkbox" id="filter-auto-start" onchange="filterLobbies()"> Только с автостартом
+                    </label>
+                    <div class="player-buttons flex gap-2 mb-2">
+                        <button onclick="filterByPlayers(2)" id="filter-players-2" class="bg-gray-300 px-4 py-2 rounded">2</button>
+                        <button onclick="filterByPlayers(3)" id="filter-players-3" class="bg-gray-300 px-4 py-2 rounded">3</button>
+                        <button onclick="filterByPlayers(4)" id="filter-players-4" class="bg-gray-300 px-4 py-2 rounded">4</button>
+                        <button onclick="filterByPlayers(5)" id="filter-players-5" class="bg-gray-300 px-4 py-2 rounded">5</button>
+                        <button onclick="filterByPlayers('2x2')" id="filter-players-2x2" class="bg-gray-300 px-4 py-2 rounded">2x2</button>
+                    </div>
                 </div>
-                <label>
-                    <input type="checkbox" id="is-private" onchange="togglePassword()"> Приватная комната
-                </label>
-                <label>
-                    <input type="checkbox" id="auto-start"> Автостарт
-                </label>
-                <button onclick="createRoom()">Создать</button>
-            </div>
-            <div id="lobby-list">
-                <h2>Список лобби</h2>
-                <ul id="lobbies"></ul>
-            </div>
-            <div id="private-lobby-list">
-                <h2>Приватные комнаты</h2>
-                <ul id="private-lobbies"></ul>
-            </div>
+            </section>
+
+            <!-- Список комнат -->
+            <section id="lobby-list" class="bg-white shadow rounded p-4">
+                <h2 class="text-xl font-semibold mb-2">Список комнат</h2>
+                <ul id="lobbies" class="list-disc pl-5"></ul>
+            </section>
         </main>
-        <footer>
-            <button onclick="window.location.href='main.html'">Назад</button>
+        <footer class="mt-4">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded" onclick="window.location.href='main.html'">Назад</button>
         </footer>
     </div>
     <script>
-        const ws = new WebSocket('ws://localhost:8080'); // Замените URL на адрес вашего WebSocket-сервера, если он отличается
+        const ws = new WebSocket('ws://localhost:8080'); // Используем ws вместо Socket.IO
 
-        const telegramUserId = window.Telegram.WebApp.initDataUnsafe?.user?.id; // Получаем ID пользователя из Telegram WebApp SDK
-
+        ws.onopen = () => console.log('WebSocket подключён');
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'lobby-list') {
                 updateLobbyList(data.lobbies);
             }
         };
+        ws.onclose = () => console.log('WebSocket отключён');
 
         let selectedPlayers = 2;
+        let lobbies = []; // Хранение всех комнат
+        let selectedFilterPlayers = null;
 
         function selectPlayers(players) {
             selectedPlayers = players;
-            document.querySelectorAll('.player-buttons button').forEach(button => {
-                button.classList.remove('active');
-            });
-            document.getElementById(`players-${players}`).classList.add('active');
+            document.querySelectorAll('.player-buttons button').forEach(button => button.classList.remove('bg-blue-500', 'text-white'));
+            document.getElementById(`players-${players}`).classList.add('bg-blue-500', 'text-white');
         }
 
         function togglePassword() {
             const isPrivate = document.getElementById('is-private').checked;
-            const passwordContainer = document.getElementById('password-container');
-            passwordContainer.style.display = isPrivate ? 'block' : 'none';
+            document.getElementById('password-container').style.display = isPrivate ? 'block' : 'none';
         }
 
         function validatePassword(input) {
@@ -82,50 +108,65 @@
             const roomName = document.getElementById('room-name').value;
             const isPrivate = document.getElementById('is-private').checked;
             const autoStart = document.getElementById('auto-start').checked;
-            const roomPassword = isPrivate ? document.getElementById('room-password').value : null;
 
-            if (!roomName) {
-                alert('Введите название комнаты');
-                return;
-            }
+            if (!roomName) return alert('Введите название комнаты');
 
-            if (isPrivate && (!roomPassword || roomPassword.length === 0)) {
-                alert('Введите пароль для приватной комнаты');
-                return;
-            }
-
-            ws.send(JSON.stringify({
-                type: 'create-room',
+            const roomData = {
+                type: 'create-lobby',
                 roomName,
-                selectedPlayers,
                 isPrivate,
-                roomPassword,
                 autoStart,
-                creatorId: telegramUserId || 'unknown', // Используем Telegram ID или 'unknown', если ID недоступен
-            }));
+            };
+
+            ws.send(JSON.stringify(roomData));
         }
 
-        function updateLobbyList(lobbies) {
+        function updateLobbyList(receivedLobbies) {
+            lobbies = receivedLobbies;
+            filterLobbies();
+        }
+
+        function filterByPlayers(players) {
+            selectedFilterPlayers = players;
+            document.querySelectorAll('.player-buttons button').forEach(button => button.classList.remove('bg-blue-500', 'text-white'));
+            document.getElementById(`filter-players-${players}`).classList.add('bg-blue-500', 'text-white');
+            filterLobbies();
+        }
+
+        function filterLobbies() {
+            const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+            const filterAutoStart = document.getElementById('filter-auto-start').checked;
+
+            const filteredLobbies = lobbies.filter((lobby) => {
+                const matchesType = filterType === 'all' || (filterType === 'public' && !lobby.isPrivate) || (filterType === 'private' && lobby.isPrivate);
+                const matchesAutoStart = !filterAutoStart || lobby.autoStart;
+                const matchesPlayers = selectedFilterPlayers === null || lobby.maxPlayers === selectedFilterPlayers || (selectedFilterPlayers === '2x2' && lobby.mode === '2x2');
+                return matchesType && matchesAutoStart && matchesPlayers;
+            });
+
+            renderLobbyList(filteredLobbies);
+        }
+
+        function renderLobbyList(filteredLobbies) {
             const lobbyList = document.getElementById('lobbies');
-            const privateLobbyList = document.getElementById('private-lobbies');
             lobbyList.innerHTML = '';
-            privateLobbyList.innerHTML = '';
 
-            lobbies.forEach((lobby) => {
+            filteredLobbies.forEach((lobby) => {
                 const li = document.createElement('li');
-                li.textContent = `${lobby.roomName} (${lobby.currentPlayers}/${lobby.maxPlayers})`;
+                li.textContent = `${lobby.roomName} (${lobby.currentPlayers}/${lobby.maxPlayers}) ${lobby.isPrivate ? '[Приватная]' : '[Публичная]'} ${lobby.autoStart ? '[Автостарт]' : ''}`;
+                li.className = 'cursor-pointer hover:underline';
                 li.onclick = () => joinLobby(lobby.roomId);
-
-                if (lobby.isPrivate) {
-                    privateLobbyList.appendChild(li);
-                } else {
-                    lobbyList.appendChild(li);
-                }
+                lobbyList.appendChild(li);
             });
         }
 
         function joinLobby(roomId) {
-            ws.send(JSON.stringify({ type: 'join-room', roomId, userId: telegramUserId || 'unknown' })); // Используем Telegram ID или 'unknown', если ID недоступен
+            ws.send(JSON.stringify({ type: 'join-room', roomId }));
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
         }
     </script>
 </body>

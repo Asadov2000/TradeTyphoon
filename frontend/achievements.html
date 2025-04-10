@@ -4,33 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Достижения - Trade Typhoon</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <div id="achievements-screen">
-        <header>
-            <h1>Достижения</h1>
+<body class="bg-gray-100 text-gray-800">
+    <div id="achievements-screen" class="container mx-auto p-4">
+        <header class="mb-4">
+            <h1 class="text-2xl font-bold">Достижения</h1>
         </header>
         <main>
-            <ul id="achievements-list">
-                <!-- Пример данных -->
-                <li>
-                    <span class="achievement-name">Первый шаг</span>
-                    <span class="achievement-description">Создайте своё первое лобби</span>
+            <ul id="achievements-list" class="space-y-4">
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Первый шаг</span>
+                    <span class="text-sm text-gray-600">Создайте своё первое лобби</span>
                 </li>
-                <li>
-                    <span class="achievement-name">Победитель</span>
-                    <span class="achievement-description">Выиграйте 5 игр</span>
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Победитель</span>
+                    <span class="text-sm text-gray-600">Выиграйте 5 игр</span>
                 </li>
-                <li>
-                    <span class="achievement-name">Мастер торговли</span>
-                    <span class="achievement-description">Заработайте 1000 токенов</span>
+                <li class="bg-white shadow rounded p-4">
+                    <span class="block font-bold">Мастер торговли</span>
+                    <span class="text-sm text-gray-600">Заработайте 1000 токенов</span>
                 </li>
-                <!-- Динамические данные будут добавляться здесь -->
             </ul>
         </main>
-        <footer>
-            <button onclick="window.location.href='main.html'">Назад</button>
+        <footer class="mt-4">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded" onclick="window.location.href='main.html'">Назад</button>
         </footer>
     </div>
 </body>

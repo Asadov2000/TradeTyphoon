@@ -4,104 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Игровое поле - Trade Typhoon</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            grid-template-rows: repeat(11, 1fr);
+            gap: 2px;
+            width: 90vmin;
+            height: 90vmin;
+            margin: 0 auto;
+            background: #333;
+            border: 5px solid white;
+            position: relative;
+        }
+
+        .cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #6a11cb;
+            color: white;
+            font-size: calc(0.8vmin + 0.5rem);
+            text-align: center;
+            border: 1px solid white;
+            padding: 5px;
+            box-sizing: border-box;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .cell.start {
+            background: #4caf50;
+            font-weight: bold;
+        }
+
+        .cell.active {
+            transform: scale(1.1);
+            background-color: #ffeb3b;
+        }
+
+        .inner-space {
+            grid-column: 2 / span 9;
+            grid-row: 2 / span 9;
+            background: #222;
+            border: none;
+        }
+
+        .player {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            transition: transform 0.3s ease;
+        }
+
+        .player-1 {
+            background-color: red;
+        }
+
+        .player-2 {
+            background-color: blue;
+        }
+
+        .player-3 {
+            background-color: green;
+        }
+
+        .player-4 {
+            background-color: yellow;
+        }
+    </style>
 </head>
-<body>
-    <div id="game-board">
+<body class="bg-gradient-to-r from-blue-500 to-purple-600 text-white min-h-screen flex flex-col">
+    <div id="game-board" class="container fade-in">
         <header>
             <h1>Игровое поле</h1>
         </header>
         <main>
-            <div class="board">
-                <div class="cell start">Старт</div>
-                <div class="cell">Духи</div>
-                <div class="cell">Шанс</div>
-                <div class="cell">Духи</div>
-                <div class="cell">Налог</div>
-                <div class="cell">Авто</div>
-                <div class="cell">Одежда</div>
-                <div class="cell">Шанс</div>
-                <div class="cell">Одеж</div>
-                <div class="cell">Тюрьма</div>
+            <div class="board" id="board">
+                <div class="cell start">
+                    <span>Старт</span>
+                </div>
+                <div class="cell">1</div>
+                <div class="cell">2</div>
+                <div class="cell">3</div>
+                <div class="cell">4</div>
+                <div class="cell">5</div>
+                <div class="cell">6</div>
                 <div class="cell">7</div>
                 <div class="cell">8</div>
                 <div class="cell">9</div>
                 <div class="cell">10</div>
                 <div class="cell">11</div>
                 <div class="cell">12</div>
-                <div class="cell">Шанс</div>
                 <div class="cell">13</div>
                 <div class="cell">14</div>
-                <div class="cell">Казино</div>
                 <div class="cell">15</div>
-                <div class="cell">Шанс</div>
                 <div class="cell">16</div>
                 <div class="cell">17</div>
                 <div class="cell">18</div>
                 <div class="cell">19</div>
-                <div class="cell">20</div>
-                <div class="cell">21</div>
-                <div class="cell">22</div>
-                <div class="cell">Тюрьма</div>
-                <div class="cell">23</div>
-                <div class="cell">24</div>
-                <div class="cell">Шанс</div>
-                <div class="cell">25</div>
-                <div class="cell">26</div>
-                <div class="cell">Шанс</div>
-                <div class="cell">27</div>
-                <div class="cell">28</div>
-                <div class="cell">Штраф</div>
                 <div class="cell">29</div>
-                <div class="inner-space"></div>
+                <div class="cell">28</div>
+                <div class="cell">27</div>
+                <div class="cell">26</div>
+                <div class="cell">25</div>
+                <div class="cell">24</div>
+                <div class="cell">23</div>
+                <div class="cell">22</div>
+                <div class="cell">21</div>
+                <div class="cell">20</div>
+                <div class="cell">39</div>
+                <div class="cell">38</div>
+                <div class="cell">37</div>
+                <div class="cell">36</div>
+                <div class="cell">35</div>
+                <div class="cell">34</div>
+                <div class="cell">33</div>
+                <div class="cell">32</div>
+                <div class="cell">31</div>
+                <div class="cell">30</div>
+                <div class="inner-space">
+                    <div class="center-content">
+                        <p>Ваш ход!</p>
+                        <button id="roll-dice" class="roll-button">🎲 Бросить кубики</button>
+                        <div id="timer" class="timer">Осталось: 60 секунд</div>
+                        <div class="chat">
+                            <div id="chat-messages" class="chat-messages"></div>
+                            <div class="chat-input-container">
+                                <input type="text" id="chat-input" class="chat-input" placeholder="Введите сообщение...">
+                                <button id="send-message" class="send-button">Отправить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="game-controls">
-                <button id="roll-dice" onclick="rollDice()">Бросить кубики</button>
-                <div id="dice-result"></div>
+            <div id="game-controls" class="text-center mt-4">
+                <button id="surrender" class="surrender-button">Сдаться</button>
             </div>
         </main>
-        <footer>
-            <button onclick="window.location.href='main.html'">Выйти</button>
-        </footer>
     </div>
     <script>
         const players = [
-            { id: 1, name: "Игрок 1", position: 0, consecutiveDoubles: 0 },
-            { id: 2, name: "Игрок 2", position: 0, consecutiveDoubles: 0 },
-            { id: 3, name: "Игрок 3", position: 0, consecutiveDoubles: 0 },
-            { id: 4, name: "Игрок 4", position: 0, consecutiveDoubles: 0 }
+            { id: 1, name: "Игрок 1", position: 0 },
+            { id: 2, name: "Игрок 2", position: 0 },
+            { id: 3, name: "Игрок 3", position: 0 },
+            { id: 4, name: "Игрок 4", position: 0 }
         ];
 
         let currentPlayerIndex = Math.floor(Math.random() * players.length);
         const boardCells = document.querySelectorAll(".cell");
+        const rollDiceButton = document.getElementById("roll-dice");
+        const surrenderButton = document.getElementById("surrender");
+        const timerElement = document.getElementById("timer");
+        let timerInterval;
+        let timeLeft = 60;
 
         function rollDice() {
-            const player = players[currentPlayerIndex];
             const dice1 = Math.floor(Math.random() * 6) + 1;
             const dice2 = Math.floor(Math.random() * 6) + 1;
-            const diceSum = dice1 + dice2;
-
-            document.getElementById("dice-result").textContent = `${player.name} бросил кубики: ${dice1} и ${dice2}`;
-
-            if (dice1 === dice2) {
-                player.consecutiveDoubles++;
-                if (player.consecutiveDoubles === 3) {
-                    alert(`${player.name} выбросил одинаковые числа 3 раза подряд и отправляется в тюрьму!`);
-                    movePlayerToJail(player);
-                    nextTurn();
-                    return;
-                } else {
-                    alert(`${player.name} выбросил одинаковые числа и ходит ещё раз!`);
-                }
-            } else {
-                player.consecutiveDoubles = 0;
-            }
-
-            movePlayer(player, diceSum);
-
-            if (dice1 !== dice2) {
-                nextTurn();
-            }
+            const total = dice1 + dice2;
+            alert(`Вы выбросили: ${dice1} + ${dice2} = ${total}`);
+            movePlayer(players[currentPlayerIndex], total);
+            resetTimer();
         }
 
         function movePlayer(player, steps) {
@@ -109,32 +174,58 @@
             player.position = (player.position + steps) % boardCells.length;
 
             boardCells[oldPosition].classList.remove(`player-${player.id}`);
-            boardCells[player.position].classList.add(`player-${player.id}`);
+            boardCells[player.position].classList.add(`player-${player.id}`, 'active');
 
-            alert(`${player.name} переместился на клетку: ${boardCells[player.position].textContent}`);
-        }
+            setTimeout(() => {
+                boardCells[player.position].classList.remove('active');
+            }, 500);
 
-        function movePlayerToJail(player) {
-            const oldPosition = player.position;
-            player.position = 9; // Индекс клетки "Тюрьма"
-
-            boardCells[oldPosition].classList.remove(`player-${player.id}`);
-            boardCells[player.position].classList.add(`player-${player.id}`);
+            nextTurn();
         }
 
         function nextTurn() {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
             alert(`Сейчас ходит: ${players[currentPlayerIndex].name}`);
+            resetTimer();
         }
 
-        function initializePlayers() {
-            players.forEach(player => {
-                boardCells[player.position].classList.add(`player-${player.id}`);
-            });
-            alert(`Первым ходит: ${players[currentPlayerIndex].name}`);
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timeLeft = 60;
+            timerElement.textContent = `Осталось: ${timeLeft} секунд`;
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = `Осталось: ${timeLeft} секунд`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    alert(`${players[currentPlayerIndex].name} проиграл из-за истечения времени!`);
+                    players.splice(currentPlayerIndex, 1);
+                    if (players.length === 1) {
+                        alert(`${players[0].name} победил!`);
+                        window.location.href = "main.html";
+                    } else {
+                        nextTurn();
+                    }
+                }
+            }, 1000);
         }
 
-        initializePlayers();
+        surrenderButton.addEventListener("click", () => {
+            const confirmSurrender = confirm("Вы уверены, что хотите сдаться?");
+            if (confirmSurrender) {
+                alert(`${players[currentPlayerIndex].name} сдался!`);
+                players.splice(currentPlayerIndex, 1);
+                if (players.length === 1) {
+                    alert(`${players[0].name} победил!`);
+                    window.location.href = "main.html";
+                } else {
+                    nextTurn();
+                }
+            }
+        });
+
+        rollDiceButton.addEventListener("click", rollDice);
+        resetTimer();
     </script>
 </body>
 </html>

@@ -1,15 +1,14 @@
 body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298); /* Новый градиент */
+    color: #f0f0f0; /* Светлый текст */
+    font-family: 'Roboto', sans-serif; /* Современный шрифт */
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #4e54c8, #8f94fb);
-    color: white;
+    padding: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
 .loading-screen {
@@ -44,14 +43,17 @@ body {
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.5);
     padding: 10px;
-    font-size: 1.2rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     max-width: 1200px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
     box-sizing: border-box;
 }
 
@@ -97,13 +99,16 @@ main {
 }
 
 footer {
-    display: flex;
-    justify-content: space-around;
+    background: rgba(0, 0, 0, 0.5);
     padding: 10px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
+    border-radius: 10px;
     width: 100%;
     max-width: 1200px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
     box-sizing: border-box;
 }
 
@@ -115,11 +120,12 @@ footer button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 footer button:hover {
     background: #2575fc;
+    transform: scale(1.05);
 }
 
 /* Адаптация для маленьких экранов (мобильные устройства) */
@@ -194,7 +200,7 @@ footer button:hover {
 
     footer button {
         padding: 10px 20px;
-        font-size: 1rem;
+        font-size: 1рем;
     }
 
     header, footer {
@@ -241,7 +247,7 @@ footer button:hover {
 
     footer button {
         padding: 12px 25px;
-        font-size: 1.1rem;
+        font-size: 1.1рем;
     }
 
     header, footer {
@@ -259,7 +265,19 @@ footer button:hover {
 
     table th, table td {
         padding: 12px;
-        font-size: 1.1rem;
+        font-size: 1.1рем;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-options button {
+        font-size: 1rem;
+        padding: 10px 15px;
+    }
+
+    .additional-options button {
+        flex: 1 1 100%; /* Кнопки занимают всю ширину */
+        margin-bottom: 10px;
     }
 }
 
@@ -364,11 +382,12 @@ footer button:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 #lobbies-list .join-lobby:hover {
     background: #2575fc;
+    transform: scale(1.05);
 }
 
 #lobbies-list .join-lobby:disabled {
@@ -423,18 +442,41 @@ footer button:hover {
 
 /* Стили для кнопок */
 button {
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
     color: white;
-    background: #6a11cb;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
-    background: #2575fc;
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: scale(1.05);
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+button:active::after {
+    width: 200%;
+    height: 200%;
 }
 
 /* Стили для таблиц */
@@ -547,11 +589,12 @@ table td {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 #lobby-list ul li button:hover, #private-lobby-list ul li button:hover {
     background: #3a6fdc; /* Более тёмный синий при наведении */
+    transform: scale(1.05);
 }
 
 #lobby-container label {
@@ -599,11 +642,12 @@ table td {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 #lobby-container button:hover {
     background: #3a6fdc; /* Более тёмный синий при наведении */
+    transform: scale(1.05);
 }
 
 /* Стили для ползунка выбора количества игроков */
@@ -705,11 +749,12 @@ table td {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 #lobby-container .player-buttons button:hover {
     background: #3a6fdc;
+    transform: scale(1.05);
 }
 
 #lobby-container .player-buttons button.active {
@@ -773,11 +818,12 @@ table td {
     border-radius: 5px;
     color: white;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .additional-options button:hover {
     background: #4e54c8;
+    transform: scale(1.05);
 }
 
 .logo {
@@ -819,16 +865,29 @@ table td {
 }
 
 .cell {
+    position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background: #6a11cb;
     color: white;
-    font-size: calc(0.8vmin + 0.5rem); /* Адаптивный размер текста */
+    font-size: 0.8rem;
     text-align: center;
     border: 1px solid white;
     padding: 5px;
-    box-sizing: border-box; /* Учитывает границы и отступы внутри размера клетки */
+    box-sizing: border-box;
+}
+
+.cell img {
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+}
+
+.cell.active {
+    transform: scale(1.1);
+    background-color: #ffeb3b; /* Подсветка активной клетки */
 }
 
 .cell::after {
@@ -870,8 +929,104 @@ table td {
 .inner-space {
     grid-column: 2 / span 9; /* Центральное пространство занимает 9 колонок */
     grid-row: 2 / span 9; /* Центральное пространство занимает 9 строк */
-    background: #222; /* Тёмный фон для центрального пространства */
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.center-content {
+    text-align: center;
+}
+
+.roll-button {
+    background: #4caf50;
+    color: white;
     border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.roll-button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.surrender-button {
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.surrender-button:hover {
+    background: #e53935;
+    transform: scale(1.05);
+}
+
+.chat {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.chat-messages {
+    height: 150px;
+    overflow-y: auto;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 0.9rem;
+}
+
+.chat-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: #444;
+    color: white;
+    font-size: 1rem;
+}
+
+.send-button {
+    padding: 10px 20px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.send-button:hover {
+    background: #45a049;
+}
+
+.timer {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: #ffeb3b;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* Адаптация для маленьких экранов */
@@ -924,4 +1079,103 @@ table td {
 
 .cell.player-4 {
     background-color: rgba(255, 255, 0, 0.5); /* Жёлтый игрок */
+}
+
+.player {
+    animation: move 0.5s ease-in-out;
+}
+
+@keyframes move {
+    0% { transform: translateY(-10px); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0); }
+}
+
+/* Унифицированные стили для контейнеров */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Заголовки */
+h1, h2 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+/* Анимации */
+.fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    h1, h2 {
+        font-size: 1.8rem;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+@media (min-width: 1025px) {
+    h1, h2 {
+        font-size: 2.5rem;
+    }
+
+    button {
+        font-size: 1.3rem;
+        padding: 20px 40px;
+    }
+}
+
+/* Анимация вращения кубика */
+@keyframes rollDice {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    25% { transform: rotateX(90deg) rotateY(0deg); }
+    50% { transform: rotateX(90deg) rotateY(90deg); }
+    75% { transform: rotateX(180deg) rotateY(90deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+/* Анимация перемещения игрока */
+@keyframes movePlayer {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(10px, -10px); }
+    100% { transform: translate(0, 0); }
+}
+
+/* Стили для кубика */
+.dice {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    animation: rollDice 1s ease-in-out infinite;
 }

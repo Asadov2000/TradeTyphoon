@@ -1,18 +1,33 @@
+require('dotenv').config(); // Подключение dotenv для работы с переменными окружения
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const crypto = require('crypto');
 const { Telegraf } = require('telegraf');
 const schedule = require('node-schedule');
-const WebSocket = require('ws');
+const WebSocket = require('ws'); // Убедитесь, что клиентский код также использует ws
 const cluster = require('cluster');
 const os = require('os');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet'); // Защита HTTP-заголовков
 const winston = require('winston');
+const https = require('https');
+const fs = require('fs');
+const Redis = require('ioredis'); // Redis для масштабирования
+const RedisStore = require('rate-limit-redis'); // Redis для rate limiting
+const db = require('./database');
+const setupWebSocket = require('./websocket');
+const routes = require('./routes')(db, logger);
 
 const app = express();
 const PORT = 3000;
-const TELEGRAM_BOT_TOKEN = '7890107637:AAFnRXy5Ld0rUSxv8QTmAQlSW4p8_6S7Pf8'; // Токен Telegram-бота
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN; // Используем переменную окружения
+
+if (!TELEGRAM_BOT_TOKEN) {
+    console.error('Ошибка: TELEGRAM_BOT_TOKEN не задан в .env');
+    process.exit(1);
+}
 
 // Настройка логгера
 const logger = winston.createLogger({
@@ -36,16 +51,20 @@ if (cluster.isMaster) {
     for (let i = 0; i < numCPUs; i++) {
         cluster.fork();
     }
-    cluster.on('exit', (worker) => {
-        console.log(`Воркер ${worker.process.pid} завершил работу`);
-        cluster.fork();
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`Воркер ${worker.process.pid завершил работу с кодом ${code} и сигналом ${signal}`);
+        cluster.fork(); // Перезапуск воркера
     });
 } else {
     app.use(cors());
     app.use(bodyParser.json());
+    app.use(helmet()); // Защита HTTP-заголовков
+    app.use('/api', routes);
 
-    // Rate limiting для защиты от DDoS-атак
+    // Настройка Redis для rate limiting
+    const redisClient = new Redis();
     const limiter = rateLimit({
+        store: new RedisStore({ sendCommand: (...args) => redisClient.call(...args) }),
         windowMs: 15 * 60 * 1000, // 15 минут
         max: 100, // Максимум 100 запросов с одного IP
         message: 'Слишком много запросов с этого IP, попробуйте позже.',
@@ -136,56 +155,62 @@ if (cluster.isMaster) {
         const ip = req.socket.remoteAddress;
         logger.info(`Новое WebSocket подключение от ${ip}`);
 
-        // Ограничение подключений с одного IP
-        if (activeConnections.has(ip) && activeConnections.get(ip) >= 5) {
-            ws.close(1008, 'Слишком много подключений с одного IP');
-            return;
+        try {
+            // Ограничение подключений с одного IP
+            if (activeConnections.has(ip) && activeConnections.get(ip) >= 5) {
+                ws.close(1008, 'Слишком много подключений с одного IP');
+                return;
+            }
+
+            activeConnections.set(ip, (activeConnections.get(ip) || 0) + 1);
+
+            ws.on('message', (message) => {
+                try {
+                    const data = JSON.parse(message);
+                    logger.info(`Получено сообщение от ${ip}: ${JSON.stringify(data)}`);
+
+                    switch (data.type) {
+                        case 'search-game':
+                            handleSearchGame(ws, data.userId);
+                            break;
+
+                        case 'create-lobby':
+                            handleCreateLobby(ws, data);
+                            break;
+
+                        case 'join-lobby':
+                            handleJoinLobby(ws, data);
+                            break;
+
+                        case 'leave-lobby':
+                            handleLeaveLobby(ws, data);
+                            break;
+
+                        case 'start-game':
+                            handleStartGame(data);
+                            break;
+
+                        default:
+                            console.log('Неизвестный тип сообщения:', data.type);
+                    }
+                } catch (err) {
+                    logger.error(`Ошибка обработки сообщения WebSocket: ${err.message}`);
+                }
+            });
+
+            ws.on('close', () => {
+                logger.info(`WebSocket соединение закрыто для ${ip}`);
+                activeConnections.set(ip, activeConnections.get(ip) - 1);
+                if (activeConnections.get(ip) <= 0) {
+                    activeConnections.delete(ip);
+                }
+                console.log('Подключение WebSocket закрыто');
+                activeSearches.delete(ws);
+                handleDisconnect(ws);
+            });
+        } catch (err) {
+            logger.error(`Ошибка WebSocket подключения: ${err.message}`);
         }
-
-        activeConnections.set(ip, (activeConnections.get(ip) || 0) + 1);
-
-        console.log('Новое подключение WebSocket');
-
-        ws.on('message', (message) => {
-            const data = JSON.parse(message);
-            logger.info(`Получено сообщение от ${ip}: ${JSON.stringify(data)}`);
-
-            switch (data.type) {
-                case 'search-game':
-                    handleSearchGame(ws, data.userId);
-                    break;
-
-                case 'create-lobby':
-                    handleCreateLobby(ws, data);
-                    break;
-
-                case 'join-lobby':
-                    handleJoinLobby(ws, data);
-                    break;
-
-                case 'leave-lobby':
-                    handleLeaveLobby(ws, data);
-                    break;
-
-                case 'start-game':
-                    handleStartGame(data);
-                    break;
-
-                default:
-                    console.log('Неизвестный тип сообщения:', data.type);
-            }
-        });
-
-        ws.on('close', () => {
-            logger.info(`WebSocket соединение закрыто для ${ip}`);
-            activeConnections.set(ip, activeConnections.get(ip) - 1);
-            if (activeConnections.get(ip) <= 0) {
-                activeConnections.delete(ip);
-            }
-            console.log('Подключение WebSocket закрыто');
-            activeSearches.delete(ws);
-            handleDisconnect(ws);
-        });
     });
 
     // Логирование событий HTTP-сервера
@@ -355,5 +380,34 @@ if (cluster.isMaster) {
         });
     }
 
-    app.listen(PORT, () => console.log(`Сервер запущен на http://localhost:${PORT}`));
+    function handleGameEvent(player, cellType) {
+        switch (cellType) {
+            case 'bonus':
+                player.score += 50;
+                logger.info(`Игрок ${player.id} получил бонус!`);
+                break;
+            case 'penalty':
+                player.score -= 30;
+                logger.info(`Игрок ${player.id} получил штраф!`);
+                break;
+            case 'chance':
+                const randomEvent = Math.random() > 0.5 ? 'bonus' : 'penalty';
+                handleGameEvent(player, randomEvent);
+                break;
+            default:
+                logger.info(`Игрок ${player.id} на обычной клетке.`);
+        }
+    }
+
+    const httpsOptions = {
+        key: fs.readFileSync('./certs/key.pem'),
+        cert: fs.readFileSync('./certs/cert.pem'),
+    };
+
+    https.createServer(httpsOptions, app).listen(PORT, () => {
+        console.log(`Сервер запущен на https://localhost:${PORT}`);
+    });
+
+    // Настройка WebSocket
+    setupWebSocket(wss, logger, db, redisClient); // Передаем WebSocket сервер в модуль
 }

@@ -5,10 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trade Typhoon - Главный экран</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #main-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+
+        header .user-info span {
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .game-options, .additional-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        button {
+            padding: 15px;
+            font-size: 1.2rem;
+            background: #6a11cb;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #4e54c8;
+            transform: scale(1.05);
+        }
+
+        @media (min-width: 768px) {
+            .game-options, .additional-options {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            button {
+                flex: 1;
+                max-width: 200px;
+            }
+        }
+
+        /* Стили для чекбоксов */
+        input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #6a11cb;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input[type="checkbox"]:checked {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border-color: #2575fc;
+            position: relative;
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: '✔';
+            font-size: 14px;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        input[type="checkbox"]:hover {
+            border-color: #4e54c8;
+            transform: scale(1.1);
+        }
+    </style>
     <script src="main.js" defer></script>
 </head>
 <body>
-    <div id="main-screen">
+    <div id="main-screen" class="container fade-in">
         <header>
             <div class="user-info">
                 <span id="user-level">Уровень: 1</span>
@@ -16,12 +124,9 @@
             </div>
         </header>
         <main>
-            <div class="logo">
-                <img src="../assets/images/logo.png" alt="Логотип Trade Typhoon" class="logo-image">
-            </div>
             <div class="game-options">
                 <button id="find-game" onclick="startGameSearch()">Поиск игры</button>
-                <button id="create-lobby" onclick="window.location.href='lobbies.html'">Создать лобби</button>
+                <button id="create-lobby" onclick="window.location.href='lobbies.html'">Лобби</button>
             </div>
             <div class="additional-options">
                 <button id="achievements" onclick="window.location.href='achievements.html'">Достижения</button>
