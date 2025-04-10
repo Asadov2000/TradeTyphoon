@@ -760,12 +760,12 @@ table td {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 15px;
+    gap: 20px;
 }
 
 .additional-options button {
     flex: 1 1 calc(33.33% - 20px); /* Три кнопки в ряд */
-    max-width: 150px;
+    max-width: 200px;
     padding: 10px 20px;
     font-size: 1rem;
     background: #6a11cb;
@@ -778,4 +778,150 @@ table td {
 
 .additional-options button:hover {
     background: #4e54c8;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.logo-image {
+    max-width: 100%;
+    height: auto;
+    width: 300px; /* Установите ширину логотипа */
+    border-radius: 10px; /* Лёгкое закругление углов */
+}
+
+#game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+    min-height: 100vh;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr); /* 11 колонок */
+    grid-template-rows: repeat(11, 1fr); /* 11 строк */
+    gap: 2px;
+    width: 90vmin; /* Поле занимает 90% минимального размера экрана */
+    height: 90vmin; /* Поле квадратное */
+    background: #333;
+    border: 5px solid white;
+    position: relative;
+    overflow: hidden; /* Предотвращает выход клеток за пределы поля */
+}
+
+.cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #6a11cb;
+    color: white;
+    font-size: calc(0.8vmin + 0.5rem); /* Адаптивный размер текста */
+    text-align: center;
+    border: 1px solid white;
+    padding: 5px;
+    box-sizing: border-box; /* Учитывает границы и отступы внутри размера клетки */
+}
+
+.cell::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+}
+
+.cell.player-1::after {
+    background: red;
+}
+
+.cell.player-2::after {
+    background: blue;
+}
+
+.cell.player-3::after {
+    background: green;
+}
+
+.cell.player-4::after {
+    background: yellow;
+}
+
+.cell.start {
+    background: #4caf50; /* Зеленый цвет для старта */
+    font-weight: bold;
+}
+
+.cell.empty {
+    background: #444; /* Пустые клетки */
+}
+
+.inner-space {
+    grid-column: 2 / span 9; /* Центральное пространство занимает 9 колонок */
+    grid-row: 2 / span 9; /* Центральное пространство занимает 9 строк */
+    background: #222; /* Тёмный фон для центрального пространства */
+    border: none;
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-width: 600px) {
+    .board {
+        width: 95vmin; /* Увеличиваем поле для маленьких экранов */
+        height: 95vmin;
+    }
+
+    .cell {
+        font-size: calc(0.7vmin + 0.4rem); /* Уменьшаем текст для маленьких экранов */
+    }
+}
+
+/* Адаптация для больших экранов */
+@media (min-width: 1025px) {
+    .board {
+        width: 80vmin; /* Уменьшаем поле для больших экранов */
+        height: 80vmin;
+    }
+
+    .cell {
+        font-size: calc(0.9vmin + 0.6rem); /* Увеличиваем текст для больших экранов */
+    }
+}
+
+#dice-result.rolling {
+    animation: roll 1s infinite;
+}
+
+@keyframes roll {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(90deg); }
+    50% { transform: rotate(180deg); }
+    75% { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.cell.player-1 {
+    background-color: rgba(255, 0, 0, 0.5); /* Красный игрок */
+}
+
+.cell.player-2 {
+    background-color: rgba(0, 0, 255, 0.5); /* Синий игрок */
+}
+
+.cell.player-3 {
+    background-color: rgba(0, 255, 0, 0.5); /* Зелёный игрок */
+}
+
+.cell.player-4 {
+    background-color: rgba(255, 255, 0, 0.5); /* Жёлтый игрок */
 }

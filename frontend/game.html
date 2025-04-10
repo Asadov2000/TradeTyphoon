@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровое поле - Trade Typhoon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-board">
+        <header>
+            <h1>Игровое поле</h1>
+        </header>
+        <main>
+            <div class="board">
+                <div class="cell start">Старт</div>
+                <div class="cell">Духи</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">Духи</div>
+                <div class="cell">Налог</div>
+                <div class="cell">Авто</div>
+                <div class="cell">Одежда</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">Одеж</div>
+                <div class="cell">Тюрьма</div>
+                <div class="cell">7</div>
+                <div class="cell">8</div>
+                <div class="cell">9</div>
+                <div class="cell">10</div>
+                <div class="cell">11</div>
+                <div class="cell">12</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">13</div>
+                <div class="cell">14</div>
+                <div class="cell">Казино</div>
+                <div class="cell">15</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">16</div>
+                <div class="cell">17</div>
+                <div class="cell">18</div>
+                <div class="cell">19</div>
+                <div class="cell">20</div>
+                <div class="cell">21</div>
+                <div class="cell">22</div>
+                <div class="cell">Тюрьма</div>
+                <div class="cell">23</div>
+                <div class="cell">24</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">25</div>
+                <div class="cell">26</div>
+                <div class="cell">Шанс</div>
+                <div class="cell">27</div>
+                <div class="cell">28</div>
+                <div class="cell">Штраф</div>
+                <div class="cell">29</div>
+                <div class="inner-space"></div>
+            </div>
+            <div id="game-controls">
+                <button id="roll-dice" onclick="rollDice()">Бросить кубики</button>
+                <div id="dice-result"></div>
+            </div>
+        </main>
+        <footer>
+            <button onclick="window.location.href='main.html'">Выйти</button>
+        </footer>
+    </div>
+    <script>
+        const players = [
+            { id: 1, name: "Игрок 1", position: 0, consecutiveDoubles: 0 },
+            { id: 2, name: "Игрок 2", position: 0, consecutiveDoubles: 0 },
+            { id: 3, name: "Игрок 3", position: 0, consecutiveDoubles: 0 },
+            { id: 4, name: "Игрок 4", position: 0, consecutiveDoubles: 0 }
+        ];
+
+        let currentPlayerIndex = Math.floor(Math.random() * players.length);
+        const boardCells = document.querySelectorAll(".cell");
+
+        function rollDice() {
+            const player = players[currentPlayerIndex];
+            const dice1 = Math.floor(Math.random() * 6) + 1;
+            const dice2 = Math.floor(Math.random() * 6) + 1;
+            const diceSum = dice1 + dice2;
+
+            document.getElementById("dice-result").textContent = `${player.name} бросил кубики: ${dice1} и ${dice2}`;
+
+            if (dice1 === dice2) {
+                player.consecutiveDoubles++;
+                if (player.consecutiveDoubles === 3) {
+                    alert(`${player.name} выбросил одинаковые числа 3 раза подряд и отправляется в тюрьму!`);
+                    movePlayerToJail(player);
+                    nextTurn();
+                    return;
+                } else {
+                    alert(`${player.name} выбросил одинаковые числа и ходит ещё раз!`);
+                }
+            } else {
+                player.consecutiveDoubles = 0;
+            }
+
+            movePlayer(player, diceSum);
+
+            if (dice1 !== dice2) {
+                nextTurn();
+            }
+        }
+
+        function movePlayer(player, steps) {
+            const oldPosition = player.position;
+            player.position = (player.position + steps) % boardCells.length;
+
+            boardCells[oldPosition].classList.remove(`player-${player.id}`);
+            boardCells[player.position].classList.add(`player-${player.id}`);
+
+            alert(`${player.name} переместился на клетку: ${boardCells[player.position].textContent}`);
+        }
+
+        function movePlayerToJail(player) {
+            const oldPosition = player.position;
+            player.position = 9; // Индекс клетки "Тюрьма"
+
+            boardCells[oldPosition].classList.remove(`player-${player.id}`);
+            boardCells[player.position].classList.add(`player-${player.id}`);
+        }
+
+        function nextTurn() {
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+            alert(`Сейчас ходит: ${players[currentPlayerIndex].name}`);
+        }
+
+        function initializePlayers() {
+            players.forEach(player => {
+                boardCells[player.position].classList.add(`player-${player.id}`);
+            });
+            alert(`Первым ходит: ${players[currentPlayerIndex].name}`);
+        }
+
+        initializePlayers();
+    </script>
+</body>
+</html>

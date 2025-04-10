@@ -17,7 +17,7 @@
         </header>
         <main>
             <div class="logo">
-                <h1>Trade Typhoon</h1>
+                <img src="../assets/images/logo.png" alt="Логотип Trade Typhoon" class="logo-image">
             </div>
             <div class="game-options">
                 <button id="find-game" onclick="startGameSearch()">Поиск игры</button>
@@ -27,14 +27,46 @@
                 <button id="achievements" onclick="window.location.href='achievements.html'">Достижения</button>
                 <button id="leaderboard" onclick="window.location.href='leaderboard.html'">Рейтинг</button>
                 <button id="tasks" onclick="window.location.href='tasks.html'">Задания</button>
-                <button id="wallet" onclick="window.location.href='wallet.html'">Кошелек</button>
-                <button id="shop" onclick="window.location.href='shop.html'">Магазин</button>
             </div>
         </main>
     </div>
     <script>
         const user = Telegram.WebApp.initDataUnsafe?.user;
         document.getElementById('user-name').textContent = user?.first_name || 'Гость';
+
+        const ws = new WebSocket('ws://localhost:8080'); // Убедитесь, что WebSocket-сервер запущен
+
+        ws.onopen = () => {
+            console.log('WebSocket подключён');
+        };
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'game-found') {
+                alert(`Игра найдена! Подключение к игре: ${data.gameId}`);
+                window.location.href = `game.html?gameId=${data.gameId}`; // Переход на игровое поле
+            }
+        };
+
+        ws.onerror = (error) => {
+            console.error('Ошибка WebSocket:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket отключён. Повторное подключение...');
+            setTimeout(() => {
+                location.reload(); // Перезагрузка страницы для повторного подключения
+            }, 3000);
+        };
+
+        function startGameSearch() {
+            if (ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ type: 'search-game', userId: 'user123' })); // Замените 'user123' на реальный userId
+                alert('Поиск игры начат...');
+            } else {
+                alert('Ошибка подключения к серверу. Попробуйте позже.');
+            }
+        }
     </script>
 </body>
 </html>
