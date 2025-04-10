@@ -49,6 +49,8 @@
     <script>
         const ws = new WebSocket('ws://localhost:8080'); // Замените URL на адрес вашего WebSocket-сервера, если он отличается
 
+        const telegramUserId = window.Telegram.WebApp.initDataUnsafe?.user?.id; // Получаем ID пользователя из Telegram WebApp SDK
+
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
             if (data.type === 'lobby-list') {
@@ -99,7 +101,7 @@
                 isPrivate,
                 roomPassword,
                 autoStart,
-                creatorId: 'user123', // Замените 'user123' на реальный идентификатор пользователя, полученный из Telegram WebApp SDK
+                creatorId: telegramUserId || 'unknown', // Используем Telegram ID или 'unknown', если ID недоступен
             }));
         }
 
@@ -123,7 +125,7 @@
         }
 
         function joinLobby(roomId) {
-            ws.send(JSON.stringify({ type: 'join-room', roomId, userId: 'user123' })); // Замените 'user123' на реальный идентификатор пользователя
+            ws.send(JSON.stringify({ type: 'join-room', roomId, userId: telegramUserId || 'unknown' })); // Используем Telegram ID или 'unknown', если ID недоступен
         }
     </script>
 </body>
