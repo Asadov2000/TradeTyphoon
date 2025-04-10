@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Typhoon - Главный экран</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" defer></script>
+</head>
+<body>
+    <div id="main-screen">
+        <header>
+            <div class="user-info">
+                <span id="user-level">Уровень: 1</span>
+                <span id="user-name" onclick="window.location.href='profile.html'">Загрузка...</span>
+            </div>
+        </header>
+        <main>
+            <div class="logo">
+                <h1>Trade Typhoon</h1>
+            </div>
+            <div class="game-options">
+                <button id="find-game" onclick="startGameSearch()">Поиск игры</button>
+                <button id="create-lobby" onclick="window.location.href='lobbies.html'">Создать лобби</button>
+            </div>
+            <div class="additional-options">
+                <button id="achievements" onclick="window.location.href='achievements.html'">Достижения</button>
+                <button id="leaderboard" onclick="window.location.href='leaderboard.html'">Рейтинг</button>
+                <button id="tasks" onclick="window.location.href='tasks.html'">Задания</button>
+                <button id="wallet" onclick="window.location.href='wallet.html'">Кошелек</button>
+                <button id="shop" onclick="window.location.href='shop.html'">Магазин</button>
+            </div>
+        </main>
+    </div>
+    <script>
+        const user = Telegram.WebApp.initDataUnsafe?.user;
+        document.getElementById('user-name').textContent = user?.first_name || 'Гость';
+    </script>
+</body>
+</html>

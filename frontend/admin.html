@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Trade Typhoon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="admin-panel">
+        <header>
+            <h1>Админ-панель</h1>
+        </header>
+        <main>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Введите юзернейм для поиска">
+                <button onclick="searchUsers()">Поиск</button>
+            </div>
+            <table id="users-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Telegram ID</th>
+                        <th>Имя пользователя</th>
+                        <th>Рейтинг</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Данные пользователей будут загружены здесь -->
+                </tbody>
+            </table>
+        </main>
+        <footer>
+            <button onclick="window.location.href='main.html'">Назад</button>
+        </footer>
+    </div>
+    <script>
+        async function loadUsers() {
+            const response = await fetch('/admin/users');
+            const users = await response.json();
+            const tableBody = document.querySelector('#users-table tbody');
+            tableBody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.telegram_id}</td>
+                    <td><input type="text" value="${user.username}" data-id="${user.id}" class="username-input"></td>
+                    <td><input type="number" value="${user.rating}" data-id="${user.id}" class="rating-input"></td>
+                    <td>
+                        <button onclick="updateUser(${user.id})">Сохранить</button>
+                        <button onclick="deleteUser(${user.id})">Удалить</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        async function updateUser(id) {
+            const username = document.querySelector(`.username-input[data-id="${id}"]`).value;
+            const rating = document.querySelector(`.rating-input[data-id="${id}"]`).value;
+
+            await fetch('/admin/users/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, username, rating }),
+            });
+
+            alert('Данные пользователя обновлены');
+            loadUsers();
+        }
+
+        async function deleteUser(id) {
+            await fetch('/admin/users/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id }),
+            });
+
+            alert('Пользователь удалён');
+            loadUsers();
+        }
+
+        async function searchUsers() {
+            const username = document.getElementById('search-input').value;
+
+            if (!username) {
+                alert('Введите юзернейм для поиска');
+                return;
+            }
+
+            const response = await fetch(`/admin/users/search?username=${encodeURIComponent(username)}`);
+            const users = await response.json();
+            const tableBody = document.querySelector('#users-table tbody');
+            tableBody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.id}</td>
+                    <td>${user.telegram_id}</td>
+                    <td><input type="text" value="${user.username}" data-id="${user.id}" class="username-input"></td>
+                    <td><input type="number" value="${user.rating}" data-id="${user.id}" class="rating-input"></td>
+                    <td>
+                        <button onclick="updateUser(${user.id})">Сохранить</button>
+                        <button onclick="deleteUser(${user.id})">Удалить</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Загружаем пользователей при загрузке страницы
+        window.onload = loadUsers;
+    </script>
+</body>
+</html>

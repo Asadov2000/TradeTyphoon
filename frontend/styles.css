@@ -1,0 +1,781 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.loading-screen {
+    text-align: center;
+}
+
+.loading-screen h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.loading-screen p {
+    font-size: 1.5rem;
+}
+
+.version {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+#main-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 10px;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 1.2rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.logo h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.game-options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.game-options button {
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    background: #4e8cff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.game-options button:hover {
+    background: #3a6fdc;
+    transform: scale(1.05);
+}
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 100%;
+    max-width: 1200px;
+    box-sizing: border-box;
+}
+
+footer button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background: #6a11cb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+footer button:hover {
+    background: #2575fc;
+}
+
+/* Адаптация для маленьких экранов (мобильные устройства) */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+
+    .loading-screen h1 {
+        font-size: 2rem;
+    }
+
+    .loading-screen p {
+        font-size: 1rem;
+    }
+
+    #main-screen header {
+        font-size: 1rem;
+    }
+
+    .game-options button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    footer button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    header, footer {
+        padding: 5px;
+    }
+
+    main {
+        padding: 5px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    table th, table td {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Адаптация для планшетов */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body {
+        font-size: 16px;
+    }
+
+    .loading-screen h1 {
+        font-size: 2.5rem;
+    }
+
+    .loading-screen p {
+        font-size: 1.2rem;
+    }
+
+    #main-screen header {
+        font-size: 1.1rem;
+    }
+
+    .game-options button {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+    }
+
+    footer button {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
+
+    header, footer {
+        padding: 10px;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    button {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    table th, table td {
+        padding: 10px;
+        font-size: 1rem;
+    }
+}
+
+/* Адаптация для больших экранов (ПК) */
+@media (min-width: 1025px) {
+    body {
+        font-size: 18px;
+    }
+
+    .loading-screen h1 {
+        font-size: 3rem;
+    }
+
+    .loading-screen p {
+        font-size: 1.5rem;
+    }
+
+    #main-screen header {
+        font-size: 1.2rem;
+    }
+
+    .game-options button {
+        padding: 15px 30px;
+        font-size: 1.2rem;
+    }
+
+    footer button {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+    }
+
+    header, footer {
+        padding: 15px;
+    }
+
+    main {
+        padding: 15px;
+    }
+
+    button {
+        font-size: 1.1rem;
+        padding: 12px 25px;
+    }
+
+    table th, table td {
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+}
+
+#leaderboard-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 10px;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+}
+
+#leaderboard-screen header {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+#leaderboard-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+#leaderboard-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+#leaderboard-list .rank {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+#leaderboard-list .name {
+    flex-grow: 1;
+    text-align: center;
+}
+
+#leaderboard-list .score {
+    font-weight: bold;
+    color: #00ff00;
+}
+
+#lobbies-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 10px;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+}
+
+#lobbies-screen header {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+#lobbies-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+#lobbies-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+#lobbies-list .lobby-name {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+#lobbies-list .lobby-players {
+    color: #00ff00;
+}
+
+#lobbies-list .join-lobby {
+    padding: 5px 10px;
+    font-size: 1rem;
+    color: white;
+    background: #6a11cb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#lobbies-list .join-lobby:hover {
+    background: #2575fc;
+}
+
+#lobbies-list .join-lobby:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+#achievements-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 10px;
+    background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    color: white;
+}
+
+#achievements-screen header {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+#achievements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    width: 90%;
+    max-width: 600px;
+}
+
+#achievements-list li {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin: 5px 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-size: 1.2rem;
+}
+
+#achievements-list .achievement-name {
+    font-weight: bold;
+    color: #ffd700;
+}
+
+#achievements-list .achievement-description {
+    color: #ffffff;
+    font-size: 1rem;
+    margin-top: 5px;
+}
+
+/* Стили для кнопок */
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background: #6a11cb;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #2575fc;
+}
+
+/* Стили для таблиц */
+table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+table th {
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+table td {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Стили для контейнера лобби */
+#lobby-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #3a3d99, #5c5edc); /* Более контрастный градиент */
+    color: white;
+    min-height: 100vh;
+}
+
+#lobby-container header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#lobby-container h1 {
+    font-size: 2.5rem;
+    margin: 0;
+    color: #ffffff; /* Белый текст для заголовка */
+}
+
+#lobby-container main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+}
+
+#create-lobby, #lobby-list, #private-lobby-list {
+    background: rgba(0, 0, 0, 0.5); /* Более тёмный фон для контраста */
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#lobby-list, #private-lobby-list {
+    margin-top: 20px;
+}
+
+#lobby-list h2, #private-lobby-list h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+#lobby-list ul, #private-lobby-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lobby-list ul li, #private-lobby-list ul li {
+    background: rgba(255, 255, 255, 0.15); /* Светлый фон для карточек */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#lobby-list ul li:hover, #private-lobby-list ul li:hover {
+    background: rgba(255, 255, 255, 0.25); /* Более яркий фон при наведении */
+    transform: scale(1.02); /* Лёгкое увеличение при наведении */
+}
+
+#lobby-list ul li span, #private-lobby-list ul li span {
+    font-size: 1.2rem;
+    color: #ffffff; /* Белый текст для видимости */
+}
+
+#lobby-list ul li button, #private-lobby-list ul li button {
+    padding: 8px 15px;
+    font-size: 1rem;
+    background: #4e8cff; /* Яркий синий для кнопок */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#lobby-list ul li button:hover, #private-lobby-list ul li button:hover {
+    background: #3a6fdc; /* Более тёмный синий при наведении */
+}
+
+#lobby-container label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 1rem;
+    color: #ffffff; /* Белый текст для видимости */
+}
+
+#lobby-container input, #lobby-container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2); /* Светлый фон для полей ввода */
+    color: white;
+}
+
+#lobby-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7); /* Полупрозрачный текст для плейсхолдера */
+}
+
+#lobby-container input#room-password {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+#lobby-container input#room-password::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+#lobby-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #4e8cff; /* Яркий синий для кнопок */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#lobby-container button:hover {
+    background: #3a6fdc; /* Более тёмный синий при наведении */
+}
+
+/* Стили для ползунка выбора количества игроков */
+#lobby-container .slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#lobby-container .slider-container label {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: white;
+}
+
+#lobby-container .slider-container input[type="range"] {
+    width: 100%;
+    max-width: 300px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: #6a11cb;
+    height: 8px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+#lobby-container .slider-container input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#lobby-container .slider-container input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#lobby-container .slider-container .slider-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-top: 5px;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 600px) {
+    #lobby-container .slider-container label {
+        font-size: 1rem;
+    }
+
+    #lobby-container .slider-container .slider-value {
+        font-size: 1.2rem;
+    }
+
+    #lobby-container .slider-container input[type="range"] {
+        max-width: 250px;
+    }
+}
+
+/* Адаптация для планшетов */
+@media (min-width: 601px) and (max-width: 1024px) {
+    #lobby-container .slider-container label {
+        font-size: 1.1rem;
+    }
+
+    #lobby-container .slider-container .slider-value {
+        font-size: 1.4rem;
+    }
+
+    #lobby-container .slider-container input[type="range"] {
+        max-width: 280px;
+    }
+}
+
+#lobby-container .player-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#lobby-container .player-buttons button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #4e8cff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#lobby-container .player-buttons button:hover {
+    background: #3a6fdc;
+}
+
+#lobby-container .player-buttons button.active {
+    background: #2575fc;
+    font-weight: bold;
+}
+
+/* Изменение стиля для "комнаты" */
+#lobby-container input#room-name {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+#lobby-container input#room-name::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.game-options {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.game-options button {
+    padding: 20px 40px;
+    font-size: 1.5rem;
+    background: #4e8cff;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.game-options button:hover {
+    background: #3a6fdc;
+    transform: scale(1.05);
+}
+
+.additional-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+}
+
+.additional-options button {
+    flex: 1 1 calc(33.33% - 20px); /* Три кнопки в ряд */
+    max-width: 150px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: #6a11cb;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.additional-options button:hover {
+    background: #4e54c8;
+}

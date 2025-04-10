@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки профиля - Trade Typhoon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="profile-settings">
+        <header>
+            <h1>Настройки профиля</h1>
+        </header>
+        <main>
+            <div id="profile-info">
+                <label>Ник:</label>
+                <span id="username">Загрузка...</span>
+
+                <label>Аватар:</label>
+                <img id="avatar" src="" alt="Аватар" width="100" height="100">
+            </div>
+        </main>
+        <footer>
+            <button onclick="window.location.href='main.html'">Назад</button>
+        </footer>
+    </div>
+    <script>
+        const user = Telegram.WebApp.initDataUnsafe?.user;
+        document.getElementById('username').textContent = user?.first_name || 'Гость';
+        document.getElementById('avatar').src = user?.photo_url || 'default-avatar.png';
+    </script>
+</body>
+</html>

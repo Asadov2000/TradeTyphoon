@@ -1,0 +1,18 @@
+{
+  "name": "trade-typhoon-backend",
+  "version": "0.1.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.21.2",
+    "node-schedule": "^2.1.1",
+    "sqlite3": "^5.1.6",
+    "telegraf": "^4.16.3",
+    "ws": "^8.18.1"
+  }
+}

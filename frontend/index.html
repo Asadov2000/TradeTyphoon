@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trade Typhoon</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div class="loading-screen">
+            <h1>Trade Typhoon</h1>
+            <p>Загрузка...</p>
+            <div class="version">Версия 0.1</div>
+        </div>
+    </div>
+    <script src="main.js"></script>
+    <script>
+        window.onload = () => {
+            setTimeout(() => {
+                window.location.href = "main.html";
+            }, 2000); // Задержка 2 секунды перед переходом
+        };
+    </script>
+</body>
+</html>

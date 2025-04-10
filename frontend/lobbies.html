@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лобби - Trade Typhoon</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="lobby-container">
+        <header>
+            <h1>Лобби</h1>
+        </header>
+        <main>
+            <div id="create-lobby">
+                <h2>Создать комнату</h2>
+                <input type="text" id="room-name" placeholder="Название комнаты">
+                <div id="password-container" style="display: none;">
+                    <input type="text" id="room-password" placeholder="Введите пароль (только цифры)" maxlength="10" oninput="validatePassword(this)">
+                </div>
+                <div class="player-buttons">
+                    <button onclick="selectPlayers(2)" id="players-2">2</button>
+                    <button onclick="selectPlayers(3)" id="players-3">3</button>
+                    <button onclick="selectPlayers(4)" id="players-4">4</button>
+                    <button onclick="selectPlayers(5)" id="players-5">5</button>
+                    <button onclick="selectPlayers('2x2')" id="players-2x2">2x2</button>
+                </div>
+                <label>
+                    <input type="checkbox" id="is-private" onchange="togglePassword()"> Приватная комната
+                </label>
+                <label>
+                    <input type="checkbox" id="auto-start"> Автостарт
+                </label>
+                <button onclick="createRoom()">Создать</button>
+            </div>
+            <div id="lobby-list">
+                <h2>Список лобби</h2>
+                <ul id="lobbies"></ul>
+            </div>
+            <div id="private-lobby-list">
+                <h2>Приватные комнаты</h2>
+                <ul id="private-lobbies"></ul>
+            </div>
+        </main>
+        <footer>
+            <button onclick="window.location.href='main.html'">Назад</button>
+        </footer>
+    </div>
+    <script>
+        const ws = new WebSocket('ws://localhost:8080'); // Замените URL на адрес вашего WebSocket-сервера, если он отличается
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            if (data.type === 'lobby-list') {
+                updateLobbyList(data.lobbies);
+            }
+        };
+
+        let selectedPlayers = 2;
+
+        function selectPlayers(players) {
+            selectedPlayers = players;
+            document.querySelectorAll('.player-buttons button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.getElementById(`players-${players}`).classList.add('active');
+        }
+
+        function togglePassword() {
+            const isPrivate = document.getElementById('is-private').checked;
+            const passwordContainer = document.getElementById('password-container');
+            passwordContainer.style.display = isPrivate ? 'block' : 'none';
+        }
+
+        function validatePassword(input) {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Разрешаем только цифры
+        }
+
+        function createRoom() {
+            const roomName = document.getElementById('room-name').value;
+            const isPrivate = document.getElementById('is-private').checked;
+            const autoStart = document.getElementById('auto-start').checked;
+            const roomPassword = isPrivate ? document.getElementById('room-password').value : null;
+
+            if (!roomName) {
+                alert('Введите название комнаты');
+                return;
+            }
+
+            if (isPrivate && (!roomPassword || roomPassword.length === 0)) {
+                alert('Введите пароль для приватной комнаты');
+                return;
+            }
+
+            ws.send(JSON.stringify({
+                type: 'create-room',
+                roomName,
+                selectedPlayers,
+                isPrivate,
+                roomPassword,
+                autoStart,
+                creatorId: 'user123', // Замените 'user123' на реальный идентификатор пользователя, полученный из Telegram WebApp SDK
+            }));
+        }
+
+        function updateLobbyList(lobbies) {
+            const lobbyList = document.getElementById('lobbies');
+            const privateLobbyList = document.getElementById('private-lobbies');
+            lobbyList.innerHTML = '';
+            privateLobbyList.innerHTML = '';
+
+            lobbies.forEach((lobby) => {
+                const li = document.createElement('li');
+                li.textContent = `${lobby.roomName} (${lobby.currentPlayers}/${lobby.maxPlayers})`;
+                li.onclick = () => joinLobby(lobby.roomId);
+
+                if (lobby.isPrivate) {
+                    privateLobbyList.appendChild(li);
+                } else {
+                    lobbyList.appendChild(li);
+                }
+            });
+        }
+
+        function joinLobby(roomId) {
+            ws.send(JSON.stringify({ type: 'join-room', roomId, userId: 'user123' })); // Замените 'user123' на реальный идентификатор пользователя
+        }
+    </script>
+</body>
+</html>
